@@ -1,0 +1,112 @@
+#############################################################
+## 						CONFIG							   ##
+#############################################################
+
+options:
+	
+	#	This is the permsission you need to give staff to see if a player used /panic
+	PanicNotify: notify.panic
+	
+	#	This is the header/footer on the message send to the player who used /panic
+	PanicHeader: &b&m------------------------------
+	
+	#	This is the actual message send to the player who used /panic
+	Panicked: You just used /panic! Wait for any staff to come to you!
+	
+	#	This is the message send to the player after they used /panic for the seccond time (To undo the changes of /panic)
+	NotPanicked: You don't have any panic effects anymore!
+	
+	#	This is the permission needed to reload this skript/plugin!
+	ReloadPerm: reload.perm
+	
+	#	This is the message send to a player who doesn't have the permission to reload this skript/plugin!
+	NoPerm: Unknown command. Type /help for available commands.
+	
+	
+	
+########################################################################
+##									CODE!							  ##
+##					DO NOT EDIT IF YOU DON'T UNDERSTAND THIS		  ##
+##						NO SUPPORT FOR EDITTED VERSIONS				  ##
+########################################################################
+
+command /panic:
+	trigger:
+		if {panic.%player%} is "false":
+			set {panic.%player%} to "true"
+			send "{@Panicked}" to player
+			loop all players:
+				loop-player has permission "{@PanicNotify}"
+				send "{@PanicHeader}" to loop-player
+				send "Panicked Player: %player%" to loop-player
+				send json of "Click to teleport to panicked player" tooltip "Click to teleport to panicked player" run "/tp %player% " to loop-player
+				send "{@PanicHeader}" to loop-player
+		else:
+			if {panic.%player%} is "true":
+				set {panic.%player%} to "false"
+				send "{@NotPanicked}"
+				
+on any movement:
+	if {panic.%player%} is "true":
+		cancel event
+		
+on damage:
+	if {panic.%victim%} is "true":
+		cancel event
+	if {panic.%attacker%} is "true":
+		cancel event
+
+command /panicreload:
+	permission: {@ReloadPerm}
+	permission message: {@NoPerm}
+	trigger:
+		wait 1 tick
+		execute console command "/skript reload panic.sk"
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+on load:
+	send "&a Succesfully loaded Panic" to console
+	send "&a Made by ColoColoMan" to console 
+	send "&a Link to the developers spigot: https://www.spigotmc.org/members/luukoman.95189/"
