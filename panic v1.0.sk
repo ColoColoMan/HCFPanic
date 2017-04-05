@@ -17,7 +17,7 @@ options:
 	NotPanicked: You don't have any panic effects anymore!
 	
 	#	This is the permission needed to reload this skript/plugin!
-	ReloadPerm: reload.perm
+	ReloadPerm: reload.panic
 	
 	#	This is the message send to a player who doesn't have the permission to reload this skript/plugin!
 	NoPerm: Unknown command. Type /help for available commands.
@@ -55,7 +55,10 @@ on damage:
 		cancel event
 	if {panic.%attacker%} is "true":
 		cancel event
-
+on block damage:
+	if {panic.%player%} is "true":
+		cancel event
+	
 command /panicreload:
 	permission: {@ReloadPerm}
 	permission message: {@NoPerm}
